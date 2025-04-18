@@ -1,0 +1,145 @@
+OOP
+function Student(i,n,a)
+{
+this.id = i;  //attribute 属性
+this.method1 = function(){}
+Student.prototype.method2 = function()
+s = new Student("D1000786");
+ script>
+function Balloon(color, diameter, speed)
+{
+    this.color = color;
+    this.diameter = diameter;
+    this.speed = speed;
+    this.id = id;
+    this.make = function()
+    {
+        let dv = document.createElement("div");
+        dv.id = id;
+        dv.stlye.cssText = 'width:' + diameter + 'px;height' + diameter +'px;border-radius:' +
+ (diameter/2 + 'px;background-color:' + )
+    }
+    this.rise = function()
+    {
+        
+    }
+ /script>
+<!DOCTYPE html>
+<html>
+<head>
+    <style>
+        body {
+            margin: 0;
+            height: 100vh;
+            overflow: hidden;
+            background: #87CEEB;
+        }
+
+        .balloon {
+            position: absolute;
+            width: 60px;
+            height: 80px;
+            border-radius: 50%;
+            cursor: pointer;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-weight: bold;
+            /* 气球尾巴 */
+            &::after {
+                content: '';
+                position: absolute;
+                bottom: -10px;
+                width: 2px;
+                height: 20px;
+                background: rgba(0,0,0,0.3);
+            }
+        }
+
+        .number {
+            position: relative;
+            z-index: 1;
+            color: #fff;
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.5);
+        }
+    </style>
+</head>
+<body>
+    <script>
+        // 创建气球容器
+        const container = document.body;
+        
+        // 气球参数配置
+        const totalBalloons = 20;
+        const animationDuration = 4000; // 毫秒
+        const maxHeight = 90; // 最高到达视口高度的百分比
+
+        // 生成随机颜色
+        function getRandomColor() {
+            return `hsl(${Math.random() * 360}, 70%, 60%)`;
+        }
+
+        // 创建气球
+        function createBalloon(number) {
+            const balloon = document.createElement('div');
+            balloon.className = 'balloon';
+            balloon.innerHTML = `<span class="number">${number}</span>`;
+            
+            // 初始样式
+            balloon.style.left = `${Math.random() * 90}%`; // 随机水平位置
+            balloon.style.backgroundColor = getRandomColor();
+            
+            return balloon;
+        }
+
+        // 运行动画
+        function animateBalloon(balloon) {
+            let startTime = null;
+            const startY = window.innerHeight + 100;
+            let currentY = startY;
+            
+            balloon.style.bottom = `${currentY}px`;
+
+            function step(timestamp) {
+                if (!startTime) startTime = timestamp;
+                const progress = timestamp - startTime;
+                const percentage = progress / animationDuration;
+
+                if (percentage <= 0.5) {
+                    // 上升阶段
+                    currentY = startY - (percentage * 2) * (window.innerHeight * maxHeight/100);
+                } else {
+                    // 下落阶段
+                    const fallPercentage = (percentage - 0.5) * 2;
+                    currentY = startY - window.innerHeight * maxHeight/100 + fallPercentage * (window.innerHeight * 0.8);
+                }
+
+                balloon.style.bottom = `${currentY}px`;
+
+                if (percentage < 1) {
+                    requestAnimationFrame(step);
+                } else {
+                    container.removeChild(balloon);
+                }
+            }
+
+            requestAnimationFrame(step);
+        }
+
+        // 初始化气球
+        for (let i = 1; i <= totalBalloons; i++) {
+            const balloon = createBalloon(i);
+            container.appendChild(balloon);
+            setTimeout(() => animateBalloon(balloon), i * 200); // 错开启动时间
+        }
+
+        // 窗口调整时重置
+        window.addEventListener('resize', () => {
+            document.querySelectorAll('.balloon').forEach(b => b.remove());
+            for (let i = 1; i <= totalBalloons; i++) {
+                const balloon = createBalloon(i);
+                container.appendChild(balloon);
+                setTimeout(() => animateBalloon(balloon), i * 200);
+            }
+        });
+    </script>
