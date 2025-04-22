@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" rel="stylesheet">
+    <title>Event Date Validation</title>
+</head>
+
+<body class="bg-gray-100 flex flex-col items-center justify-center min-h-screen">
+    <div class="bg-white p-8 rounded shadow-md w-full max-w-md">
+        <h1 class="text-2xl font-bold mb-4">Event Date Validation</h1>
+        <p class="mb-4">Enter an event date in YYYY-MM-DD format:</p>
+        <input type="text" id="eventDateInput" class="border border-gray-300 p-2 w-full mb-4 rounded"
+            placeholder="Enter event date">
+        <button id="checkButton"
+            class="bg-blue-500 text-white p-2 rounded hover:bg-blue-600 focus:outline-none">Check</button>
+        <div id="result" class="mt-4"></div>
+    </div>
+
+    <script>
+        function isValidDate(dateString) {
+            const date = new Date(dateString);
+            return!isNaN(date.getTime());
+        }
+
+        const checkButton = document.getElementById('checkButton');
+        const eventDateInput = document.getElementById('eventDateInput');
+        const resultDiv = document.getElementById('result');
+
+        checkButton.addEventListener('click', () => {
+            const eventDate = eventDateInput.value;
+            const isDateValid = isValidDate(eventDate);
+            resultDiv.textContent = isDateValid ? 'The event date is valid.' : 'The event date is invalid.';
+        });
+    </script>
+</body>
+
+</html>    
