@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" rel="stylesheet">
+    <title>Time Slot Checker</title>
+</head>
+
+<body class="bg-gray-100 flex flex-col items-center justify-center min-h-screen">
+    <div class="bg-white p-8 rounded shadow-md w-full max-w-md">
+        <h1 class="text-2xl font-bold mb-4">Time Slot Checker</h1>
+        <p class="mb-4">Enter time slots in the format like "TR10:00-11:15, F14:00-15:45":</p>
+        <input type="text" id="timeSlotsInput" class="border border-gray-300 p-2 w-full mb-4 rounded"
+            placeholder="Enter time slots">
+        <button id="checkButton"
+            class="bg-blue-500 text-white p-2 rounded hover:bg-blue-600 focus:outline-none">Check</button>
+        <div id="result" class="mt-4"></div>
+    </div>
+
+    <script>
+        function righttime(timeslots) {
+            const now = new Date();
+            const days = ['N', 'M', 'T', 'W', 'R', 'F', 'S'];
+            const currentDay = days[now.getDay()];
+            const currentHours = String(now.getHours()).padStart(2, '0');
+            const currentMinutes = String(now.getMinutes()).padStart(2, '0');
+            const currentTime = `${currentHours}:${currentMinutes}`;
+
+            const slots = timeslots.split(',');
+            for (let slot of slots) {
+                slot = slot.trim();
+                const slotDays = slot.slice(0, 2).replace(/NS|MW|FR/g, (match) => match);
+                if (slotDays.includes(currentDay)) {
+                    const [startTime, endTime] = slot.slice(2).split('-');
+                    if (startTime <= currentTime && currentTime <= endTime) {
+                        return true;
+                    }
+                }
+            }
+            return false;
+        }
+
+        const checkButton = document.getElementById('checkButton');
+        const timeSlotsInput = document.getElementById('timeSlotsInput');
+        const resultDiv = document.getElementById('result');
+
+        checkButton.addEventListener('click', () => {
+            const timeSlots = timeSlotsInput.value;
+            const isRightTime = righttime(timeSlots);
+            resultDiv.textContent = isRightTime ? 'The current time is within the given time slots.' : 'The current time is not within the given time slots.';
+        });
+    </script>
+</body>
+
+</html>
+    
